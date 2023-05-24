@@ -1,18 +1,17 @@
 import re
 
-def validar_opcion(string: str) ->str:
+def validar_opcion(string: str) -> int:
     '''
-    valida que la encuentre la opcion correcta
-    recibe un string
-    retorna el string si se equivoca el usuario retorna un  mensaje de error 
+    Valida que se ingrese una opción correcta.
+    Recibe un string y retorna un entero si es una opción válida.
+    Si el usuario se equivoca, muestra un mensaje de error y retorna -1.
     '''
 
-    if re.search(r'(^2[0-3]$|^[0-1]?[0-9]$|([21|22)$)',string ) != None:
-        if string.isdigit():
-            retorno = int(string)
-            return retorno
+    if string.isdigit():
+        opcion = int(string)
+        if opcion >= 0 and opcion <= 23 and opcion != 21 and opcion != 22:
+            return opcion
+        else: 
+            print("------ ERROR ------ Ingrese una opción válida (0 - 23 [NO 21-22])")
     else:
-        print("------ ERRORRRR ------ Ingrese una opcion correcta (0 - 23)")
-        pass
-
- 
+        print("------ ERROR ------ Ingrese una opción válida (0 - 23 [NO 21-22])")

@@ -1,10 +1,21 @@
-
 from validaciones import *
 import json
 import re
 
 
 
+def parse_json(ruta_json:str):
+
+    lista_vacia = []
+    with open(ruta_json, 'r', encoding="utf-8") as archivo:
+        diccionario = json.load(archivo)
+        lista_vacia = diccionario["jugadores"]
+
+    return lista_vacia
+
+ruta_json = r"C:\\Users\\blair\\Documents\\GitHub\\pp_lab1_wlach_valeria_natalia\\dt.json"
+
+lista_jugadores = parse_json(ruta_json)
 
 def imprimir_menu():
     '''
@@ -22,7 +33,7 @@ def imprimir_menu():
     print("7. Calcular y mostrar el jugador con la mayor cantidad de rebotes totales")
     print("8. Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo")
     print("9. Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.")
-    print("10. ngresar un valor y mostrar los jugadores que han promediado mas "
+    print("10. ingresar un valor y mostrar los jugadores que han promediado más "
           "puntos por partido que ese valor.")
     print("11. ingresar un valor y mostrar los jugadores que han promediado" 
           "más rebotes por partido que ese valor.")
@@ -53,11 +64,11 @@ def menu_principal():
     
     while True:
         imprimir_menu()
-        string = input("\nIngrese la opción deseada: ")     
+        string = input("\nIngrese la opción deseada: ")
         opcion_validado = validar_opcion(string)
         return opcion_validado
-       
-def principal():
+    
+def principal(lista_jugadores):
 
     '''
     esta funcion tiene una bandera que no deja que ingrese a la ocpion 6 sin ingresar primero a las opciones
@@ -72,7 +83,7 @@ while True:
     
     match (opcion): 
             case 1:   
-                pass
+               print(lista_jugadores[0])
             case 2:
                 pass
             case 3:
