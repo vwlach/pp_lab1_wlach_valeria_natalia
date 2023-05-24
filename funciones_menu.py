@@ -1,3 +1,4 @@
+
 from validaciones import *
 import json
 import re
@@ -21,7 +22,7 @@ def imprimir_menu():
     print("7. Calcular y mostrar el jugador con la mayor cantidad de rebotes totales")
     print("8. Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo")
     print("9. Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.")
-    print("10. ingresar un valor y mostrar los jugadores que han promediado más "
+    print("10. ngresar un valor y mostrar los jugadores que han promediado mas "
           "puntos por partido que ese valor.")
     print("11. ingresar un valor y mostrar los jugadores que han promediado" 
           "más rebotes por partido que ese valor.")
@@ -52,11 +53,11 @@ def menu_principal():
     
     while True:
         imprimir_menu()
-        string = input("\nIngrese la opción deseada: ")
+        string = input("\nIngrese la opción deseada: ")     
         opcion_validado = validar_opcion(string)
         return opcion_validado
-    
-def principal(lista_personajes):
+       
+def principal():
 
     '''
     esta funcion tiene una bandera que no deja que ingrese a la ocpion 6 sin ingresar primero a las opciones
