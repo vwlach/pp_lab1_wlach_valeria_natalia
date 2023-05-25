@@ -2,8 +2,6 @@ from validaciones import *
 import json
 import re
 
-
-
 def parse_json(ruta_json:str):
 
     lista_vacia = []
@@ -16,6 +14,93 @@ def parse_json(ruta_json:str):
 ruta_json = r"C:\\Users\\blair\\Documents\\GitHub\\pp_lab1_wlach_valeria_natalia\\dt.json"
 
 lista_jugadores = parse_json(ruta_json)
+
+def mostrar_nombre_y_parametro(lista_o_diccionario: list or dict, parametro: str):
+    """
+    recibe la lista de jugadores y un parametro y los imprime y parsea el parametro
+    recibe una lista
+    no retona nada, imprime por pantalla
+    """
+    if type(lista_o_diccionario) == list:
+        for jugadores in lista_o_diccionario:
+            nombre = jugadores["nombre"]
+            x_parametro = jugadores[parametro]
+            print("{0} - {1}: {2}".format(nombre, parametro.capitalize(), x_parametro))
+
+    elif type(lista_o_diccionario) == dict:
+        for clave in lista_o_diccionario:
+            valor = lista_o_diccionario[clave]
+            print("{0}: {1}".format(clave.capitalize(), valor))
+
+    return 
+
+def mostrar_informacion_jugador(lista_jugadores: list) -> dict:
+    '''
+    muestra los jugadores para que el usuario pueda elegir cual desea imprimir por pantalla ingresando su indice y a la vez
+    se guarda la informacion para ser utilizada porteriormente
+    recibe una lista 
+    retorna un diccionario
+
+    '''
+
+    diccionario_jugador = {}
+
+    print("0 - Michael Jordan")
+    print("1 - Magic Johnson")
+    print("2 - Larry Bird")
+    print("3 - Charles Barkley")
+    print("4 - Scottie Pippen")
+    print("5 - David Robinson")
+    print("6 - Patrick Ewing")
+    print("7 - Karl Malone")
+    print("8 - John Stockton")
+    print("9 - Clyde Drexler")
+    print("10 - Chris Mullin")
+    print("11 - Christian Laettner")
+
+    
+    string = input("Ingrese el indice del jugador del que quiera ver su informacion: ")
+    opcion_validada = validar_opcion_2(string)
+    indice = opcion_validada
+
+    for i in range(len(lista_jugadores)):
+        if indice == i:
+            diccionario_jugador["nombre"] = lista_jugadores[i]["nombre"]
+            diccionario_jugador["temporadas"] = lista_jugadores[i]["estadisticas"]["temporadas"]
+            diccionario_jugador["puntos totales"] = lista_jugadores[i]["estadisticas"]["puntos_totales"]
+            diccionario_jugador["promedio puntos por partido"] = lista_jugadores[i]["estadisticas"]["promedio_puntos_por_partido"]
+            diccionario_jugador["rebotes totales"] = lista_jugadores[i]["estadisticas"]["rebotes_totales"]
+            diccionario_jugador["promedio rebotes por partido"] = lista_jugadores[i]["estadisticas"]["promedio_rebotes_por_partido"]
+            diccionario_jugador["asistencias totales"] = lista_jugadores[i]["estadisticas"]["asistencias_totales"]
+            diccionario_jugador["promedio asistencias por partido"] = lista_jugadores[i]["estadisticas"]["promedio_asistencias_por_partido"]
+            diccionario_jugador["robos totales"] = lista_jugadores[i]["estadisticas"]["robos_totales"]
+            diccionario_jugador["bloqueos totales"] = lista_jugadores[i]["estadisticas"]["bloqueos_totales"]
+            diccionario_jugador["porcentaje tiros de campo"] = lista_jugadores[i]["estadisticas"]["porcentaje_tiros_de_campo"]
+            diccionario_jugador["porcentaje de tiros libres"] = lista_jugadores[i]["estadisticas"]["porcentaje_tiros_libres"]
+            diccionario_jugador["porcentaje tiros triples"] = lista_jugadores[i]["estadisticas"]["porcentaje_tiros_triples"]
+            
+    mostrar_nombre_y_parametro(diccionario_jugador, None )
+    
+    return diccionario_jugador
+
+def guardar_estisticas_en_csv(ruta_file:str, contenido:dict):
+    """
+    La función es básicamente un bucle que recorre las claves y valores del diccionario 
+    contenido y los escribe en el archivo CSV de forma formateada. Luego, muestra un mensaje
+    indicando que el archivo se creó correctamente.
+    recibe 
+    recibe un str con la ruda donde se va a guardar el csv
+    no retorna nada, imprime por pantalla si se logra crear el archivo
+    """
+    with open(ruta_file, 'w+') as archivo:
+        for clave in contenido:
+            valor = contenido[clave]
+            archivo.write("{0}: {1}\n".format(clave.capitalize(), valor))
+    if len(contenido) > 0:
+        print("Se creo el archivo con exito")
+    else:
+        print("Error al crear el archivo")
+
 
 def imprimir_menu():
     '''
@@ -80,14 +165,19 @@ def principal(lista_jugadores):
 
 while True:
     opcion = menu_principal()
-    
-    match (opcion): 
+    bandera_opcion_3 = True
+
+    match opcion: 
             case 1:   
-               print(lista_jugadores[0])
+               mostrar_nombre_y_parametro(lista_jugadores, "posicion")
             case 2:
-                pass
+                diccionario_jugador = mostrar_informacion_jugador(lista_jugadores)
+                bandera_opcion_3 = False
             case 3:
-                pass
+                if bandera_opcion_3:
+                    guardar_estisticas_en_csv(r"C:\\Users\\blair\\Documents\\GitHub\\pp_lab1_wlach_valeria_natalia\\jugador_estadistica.csv", diccionario_jugador)
+                elif bandera_opcion_3 == True:
+                    print("------ ERROR ------ Debe ingresar primero a la opcion 2 del menu")
             case 4:
                 pass
             case 5:
