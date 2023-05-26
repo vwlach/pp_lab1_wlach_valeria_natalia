@@ -1,4 +1,5 @@
 from validaciones import *
+from calculos import *
 import json
 import re
 
@@ -15,7 +16,7 @@ ruta_json = r"C:\\Users\\blair\\Documents\\GitHub\\pp_lab1_wlach_valeria_natalia
 
 lista_jugadores = parse_json(ruta_json)
 
-def mostrar_nombre_y_parametro(lista_o_diccionario: list or dict, parametro: str):
+def mostrar_nombre_y_parametro(lista_o_diccionario: list or dict, parametro: str ):
     """
     recibe la lista de jugadores y un parametro y los imprime y parsea el parametro
     recibe una lista
@@ -30,7 +31,7 @@ def mostrar_nombre_y_parametro(lista_o_diccionario: list or dict, parametro: str
     elif type(lista_o_diccionario) == dict:
         for clave in lista_o_diccionario:
             valor = lista_o_diccionario[clave]
-            print("{0}: {1}".format(clave.capitalize(), valor))
+            print("{0} - {1}: {2}".format(clave.capitalize(), parametro.capitalize(),  valor))
 
     return 
 
@@ -101,7 +102,79 @@ def guardar_estisticas_en_csv(ruta_file:str, contenido:dict):
     else:
         print("Error al crear el archivo")
 
+def buscar_jugador_mostrar_logros(lista_jugadores, parametro):
+    """
+    Esta función busca el nombre de un jugador en una lista de jugadores y muestra sus logros en función
+    de un parámetro dado.
+    
+    :param lista_jugadores: una lista de diccionarios que contienen información sobre los jugadores,
+    incluidos sus nombres y logros
+    :param parametro: El parámetro es una cadena que representa el logro o atributo específico de un
+    jugador que el usuario quiere ver, como "puntos" (puntos) o "asistencias" (asistencias)
+    :return: nada (es decir, ninguno).
+    """
 
+    flag = False
+    diccionario_aux = {}
+    for jugadores in lista_jugadores:
+        print(jugadores["nombre"])
+
+    nombre_ingresado = input("Ingrese el nombre del jugador que quiera ver sus logros: ")
+    expresion_regular= r'\b'+nombre_ingresado+r'\b|\b'+nombre_ingresado+r'[a-zA-Z]{1,}\b|\b[a-zA-Z]{1,}'+nombre_ingresado+r'\b'
+    
+    for jugador in lista_jugadores:
+        nombre = jugador["nombre"].lower()
+        if re.search(expresion_regular, nombre) != None:
+            diccionario_aux[ jugador["nombre"]] = jugador[parametro]
+            flag = True
+    if flag == False:
+        print("---- ERROR ---- Ingrese un nombre correcto")
+    
+    return diccionario_aux
+
+def calcular_mostrar_promedio_de_puntos_ordenado(lista_jugadores, key , parametro):
+    """
+    Esta función calcula y muestra el promedio de puntos por juego para una lista de jugadores y luego
+    ordena y muestra los nombres de los jugadores y su promedio de puntos por juego en orden ascendente.
+    
+    :param lista_jugadores: una lista de diccionarios, donde cada diccionario representa un jugador y
+    sus estadísticas
+    :param key: La clave es una cadena que representa la clave en el diccionario de cada jugador que
+    queremos usar para los cálculos. Por ejemplo, si queremos calcular la media de puntos por partido,
+    la clave sería "estadisticas"
+    :param parametro: El parámetro que se usará para calcular el promedio de puntos por juego para cada
+    jugador en la lista
+    :return: nada (es decir, Ninguno).
+    """
+
+    resultado = calcular_promedio(lista_jugadores, key, parametro)
+    print("El promedio de puntos por partido es: {0}".format(resultado))
+    lista_auxiliar = []
+    for jugadores in lista_jugadores:
+       diccionario_auxiliar = {}
+       diccionario_auxiliar["nombre"] = jugadores["nombre"]
+       diccionario_auxiliar["promedio_puntos_por_partido"] = jugadores["estadisticas"]["promedio_puntos_por_partido"]
+       lista_auxiliar.append(diccionario_auxiliar)
+    
+    retorno_quick = quick_sort_diccionarios(lista_auxiliar,"nombre", flag_orden = True)
+    mostrar_nombre_y_parametro(retorno_quick, "promedio_puntos_por_partido")
+    
+    return 
+def mostrar_jugadores__salon_fama(lista_jugadores, parametro):
+
+    diccionario = buscar_jugador_mostrar_logros(lista_jugadores, "logros")
+    lista_valor = []
+    for i in diccionario:
+        lista_valor.append(diccionario[i])
+    
+    for i in lista_valor:
+        if parametro in i:
+            print("Este jugador es {0}".format(parametro))
+        else:
+            print("Este jugador no es {0}". format(parametro))
+
+
+    return 
 def imprimir_menu():
     '''
     imprime  las opciones del menu
@@ -174,16 +247,18 @@ while True:
                 diccionario_jugador = mostrar_informacion_jugador(lista_jugadores)
                 bandera_opcion_3 = False
             case 3:
-                if bandera_opcion_3:
+                if bandera_opcion_3: #volver a ver lo de la bandera
                     guardar_estisticas_en_csv(r"C:\\Users\\blair\\Documents\\GitHub\\pp_lab1_wlach_valeria_natalia\\jugador_estadistica.csv", diccionario_jugador)
                 elif bandera_opcion_3 == True:
                     print("------ ERROR ------ Debe ingresar primero a la opcion 2 del menu")
             case 4:
-                pass
+                diccionario_logros = buscar_jugador_mostrar_logros(lista_jugadores, "logros")
+                mostrar_nombre_y_parametro(diccionario_logros,"logros" )
+                
             case 5:
-                pass
+                calcular_mostrar_promedio_de_puntos_ordenado(lista_jugadores, "estadisticas", "promedio_puntos_por_partido")
             case 6:
-                pass
+                mostrar_jugadores__salon_fama(lista_jugadores, "Miembro del Salon de la Fama del Baloncesto")
             case 7:
                 pass
             case 8:

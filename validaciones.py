@@ -27,5 +27,3 @@ def validar_opcion_2(string: str) -> int:
     else:
         print("------ ERROR ------ Ingrese una opción válida (0 - 11)")
         pass
-
- 
