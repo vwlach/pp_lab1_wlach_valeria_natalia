@@ -88,3 +88,29 @@ def quick_sort_diccionarios(lista_original: list, key,  flag_orden: bool, ) -> l
         retorno = lista_de
         
     return retorno
+
+def calcular_max_min_dato_de_diccionario(lista_personajes: list, key:str, parametro:str, maximo: str):
+    '''
+    recorre la lista y determina el minimo y el maximo por x parametro y guarda su nombre
+    recibe una lista, una categoria y un booleano
+    devuelve un string con el nombre del personaje
+    
+    '''
+    if not lista_personajes:
+        return -1
+    
+    indice_maximo_minimo = 0
+    
+    if maximo:
+        for indice_actual in range(len(lista_personajes)):
+            if indice_actual == 0 or float(lista_personajes[indice_maximo_minimo][key][parametro])< float(lista_personajes[indice_actual][key][parametro]):
+                indice_maximo_minimo = indice_actual
+                nombre = lista_personajes[indice_maximo_minimo]["nombre"]
+    elif maximo == False:
+        for indice_actual in range(len(lista_personajes)):
+            if indice_actual == 0 or float(lista_personajes[minimo_altura_indice][key][parametro])> float(lista_personajes[indice_actual][key][parametro]):
+                minimo_altura_indice = indice_actual
+                nombre = lista_personajes[indice_maximo_minimo]["nombre"]
+
+    
+    return nombre

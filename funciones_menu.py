@@ -34,6 +34,11 @@ def mostrar_nombre_y_parametro(lista_o_diccionario: list or dict, parametro: str
             print("{0} - {1}: {2}".format(clave.capitalize(), parametro.capitalize(),  valor))
 
     return 
+def limpiar_cadena_de_no_alfanumericos(cadena):
+    
+    cadena_limpia = re.sub(r'[^a-zA-Z0-9]', ' ', cadena)
+
+    return cadena_limpia
 
 def mostrar_informacion_jugador(lista_jugadores: list) -> dict:
     '''
@@ -160,7 +165,19 @@ def calcular_mostrar_promedio_de_puntos_ordenado(lista_jugadores, key , parametr
     mostrar_nombre_y_parametro(retorno_quick, "promedio_puntos_por_partido")
     
     return 
+
 def mostrar_jugadores__salon_fama(lista_jugadores, parametro):
+    """
+    La función toma una lista de jugadores y un parámetro, busca los logros de los jugadores e imprime
+    si cada jugador tiene el parámetro especificado o no.
+    
+    :param lista_jugadores: una lista de diccionarios que contienen información sobre los jugadores
+    :param parametro: El parámetro es una cadena que representa un determinado logro o característica
+    que puede tener un jugador. La función buscará en una lista de jugadores y sus logros para
+    determinar qué jugadores tienen el parámetro especificado e imprimirá un mensaje indicando si lo
+    tienen o no
+    :return: nada (es decir, ninguno).
+    """
 
     diccionario = buscar_jugador_mostrar_logros(lista_jugadores, "logros")
     lista_valor = []
@@ -173,8 +190,31 @@ def mostrar_jugadores__salon_fama(lista_jugadores, parametro):
         else:
             print("Este jugador no es {0}". format(parametro))
 
+    return 
+
+def calcular_mostrar_maximo_parametro(lista_jugadores, key, parametro, maximo):
+    """
+    Esta función calcula y muestra el jugador con el valor más alto para un parámetro dado en una lista
+    de diccionarios.
+    
+    :param lista_jugadores: Es una lista de diccionarios que contienen información sobre los jugadores
+    :param key: La clave es una cadena que representa la clave en el diccionario que queremos usar para
+    comparar los valores de los jugadores. Por ejemplo, si tenemos un diccionario de jugadores con
+    claves como "nombre", "edad", "puntuación", etc., elegiríamos una de estas claves para comparar el
+    :param parametro: El parámetro que se analiza para encontrar el valor máximo
+    :param maximo: El parámetro "maximo" es probablemente un valor que se utiliza para determinar el
+    valor máximo de un determinado parámetro en un diccionario. No está claro en el código dado qué
+    valor específico o tipo de datos debe ser "maximo"
+    :return: nada (es decir, Ninguno).
+    """
+
+
+    jugador_maximo_parametro = calcular_max_min_dato_de_diccionario(lista_jugadores, key, parametro, maximo)
+    parametro_limpio = limpiar_cadena_de_no_alfanumericos(parametro)
+    print("El jugador con la mayor cantidad de {0} es: {1}".format(parametro_limpio, jugador_maximo_parametro ))
 
     return 
+
 def imprimir_menu():
     '''
     imprime  las opciones del menu
@@ -244,6 +284,7 @@ while True:
             case 1:   
                mostrar_nombre_y_parametro(lista_jugadores, "posicion")
             case 2:
+                #mirar esto
                 diccionario_jugador = mostrar_informacion_jugador(lista_jugadores)
                 bandera_opcion_3 = False
             case 3:
@@ -260,11 +301,11 @@ while True:
             case 6:
                 mostrar_jugadores__salon_fama(lista_jugadores, "Miembro del Salon de la Fama del Baloncesto")
             case 7:
-                pass
+                calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "rebotes_totales", maximo = True)
             case 8:
-                pass
+                calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "porcentaje_tiros_de_campo", maximo = True)
             case 9:
-                pass
+                calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "asistencias_totales", maximo = True)
             case 10:
                 pass
             case 11:
