@@ -16,7 +16,7 @@ ruta_json = r"C:\\Users\\blair\\Documents\\GitHub\\pp_lab1_wlach_valeria_natalia
 
 lista_jugadores = parse_json(ruta_json)
 
-def mostrar_nombre_y_parametro(lista_o_diccionario: list or dict, parametro: str ):
+def mostrar_nombre_y_parametroy_valor(lista_o_diccionario: list or dict, parametro: str ):
     """
     recibe la lista de jugadores y un parametro y los imprime y parsea el parametro
     recibe una lista
@@ -34,6 +34,11 @@ def mostrar_nombre_y_parametro(lista_o_diccionario: list or dict, parametro: str
             print("{0} - {1}: {2}".format(clave.capitalize(), parametro.capitalize(),  valor))
 
     return 
+
+
+
+
+
 def limpiar_cadena_de_no_alfanumericos(cadena):
     
     cadena_limpia = re.sub(r'[^a-zA-Z0-9]', ' ', cadena)
@@ -85,7 +90,7 @@ def mostrar_informacion_jugador(lista_jugadores: list) -> dict:
             diccionario_jugador["porcentaje de tiros libres"] = lista_jugadores[i]["estadisticas"]["porcentaje_tiros_libres"]
             diccionario_jugador["porcentaje tiros triples"] = lista_jugadores[i]["estadisticas"]["porcentaje_tiros_triples"]
             
-    mostrar_nombre_y_parametro(diccionario_jugador, None )
+    mostrar_nombre_y_parametroy_valor(diccionario_jugador, None )
     
     return diccionario_jugador
 
@@ -162,7 +167,7 @@ def calcular_mostrar_promedio_de_puntos_ordenado(lista_jugadores, key , parametr
        lista_auxiliar.append(diccionario_auxiliar)
     
     retorno_quick = quick_sort_diccionarios(lista_auxiliar,"nombre", flag_orden = True)
-    mostrar_nombre_y_parametro(retorno_quick, "promedio_puntos_por_partido")
+    mostrar_nombre_y_parametroy_valor(retorno_quick, "promedio_puntos_por_partido")
     
     return 
 
@@ -209,10 +214,65 @@ def calcular_mostrar_maximo_parametro(lista_jugadores, key, parametro, maximo):
     """
 
 
-    jugador_maximo_parametro = calcular_max_min_dato_de_diccionario(lista_jugadores, key, parametro, maximo)
+    lista_jugador_maximo_parametro = calcular_max_min_dato_de_diccionario(lista_jugadores, key, parametro, maximo)
     parametro_limpio = limpiar_cadena_de_no_alfanumericos(parametro)
-    print("El jugador con la mayor cantidad de {0} es: {1}".format(parametro_limpio, jugador_maximo_parametro ))
 
+    
+    if len(lista_jugador_maximo_parametro) == 1:
+        print("El jugador con la mayor cantidad de {0} es: {1}".format(parametro_limpio, lista_jugador_maximo_parametro[0] ))
+    else: 
+        print("Los jugadores con la mayor cantidad de {0} son:".format(parametro_limpio))
+        for jugadores in lista_jugador_maximo_parametro:
+           print(jugadores)
+        
+    return 
+
+def comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, key, parametro ):
+
+    numero_ingresado = input("Ingrese valor que quiera comparar: ")
+    numero_formateado = validar_int_o_float(numero_ingresado)
+    
+    print("Los jugadores que tienen mayor valor que el ingresado son:\n")
+    for jugadores in lista_jugadores:
+        if numero_formateado < jugadores[key][parametro]:
+            print(jugadores["nombre"])
+    
+    return 
+
+def calcular_mostrar_promedio_de_puntos_ordenado_sin_el_menor(lista_jugadores, key , parametro):
+    """
+    Esta función calcula y muestra el promedio de puntos por juego para una lista de jugadores,
+    ordenados por nombre, excluyendo al jugador con el promedio de puntos más bajo.
+    
+    :param lista_jugadores: Una lista de diccionarios que representan a jugadores de baloncesto, cada
+    uno con una tecla "nombre" (cadena) y una tecla "estadisticas" (diccionario) que contiene varias
+    estadísticas, incluido "promedio_puntos_por_partido" (flotante)
+    :param key: "estadisticas"
+    :param parametro: El parámetro es una cadena que representa la clave del valor que se utilizará para
+    calcular el promedio. Se utiliza en la función "calcular_promedio"
+    :return: Ninguno.
+    """
+    
+
+    lista_auxiliar = []
+    for jugadores in lista_jugadores:
+       diccionario_auxiliar = {}
+       diccionario_auxiliar["nombre"] = jugadores["nombre"]
+       diccionario_auxiliar["promedio_puntos_por_partido"] = jugadores[key][parametro]
+       lista_auxiliar.append(diccionario_auxiliar)
+    
+    lista_sin_el_menor = []
+    lista_retorno = calcular_max_min_dato_de_diccionario(lista_jugadores, key, parametro, maximo= False)
+    for personajes in lista_auxiliar:
+        for persona in lista_retorno:
+            if personajes["nombre"] != persona["nombre"]:
+                lista_sin_el_menor.append(personajes)
+                
+    retorno_quick = quick_sort_diccionarios(lista_sin_el_menor,"nombre", flag_orden = True)
+    mostrar_nombre_y_parametroy_valor(retorno_quick, parametro)
+
+    resultado = calcular_promedio_sin_el_menor(lista_sin_el_menor,  parametro)
+    print("\nEl promedio de puntos por partido es: {0}".format(resultado))
     return 
 
 def imprimir_menu():
@@ -282,7 +342,7 @@ while True:
 
     match opcion: 
             case 1:   
-               mostrar_nombre_y_parametro(lista_jugadores, "posicion")
+               mostrar_nombre_y_parametroy_valor(lista_jugadores, "posicion")
             case 2:
                 #mirar esto
                 diccionario_jugador = mostrar_informacion_jugador(lista_jugadores)
@@ -294,8 +354,7 @@ while True:
                     print("------ ERROR ------ Debe ingresar primero a la opcion 2 del menu")
             case 4:
                 diccionario_logros = buscar_jugador_mostrar_logros(lista_jugadores, "logros")
-                mostrar_nombre_y_parametro(diccionario_logros,"logros" )
-                
+                mostrar_nombre_y_parametroy_valor(diccionario_logros,"logros" )
             case 5:
                 calcular_mostrar_promedio_de_puntos_ordenado(lista_jugadores, "estadisticas", "promedio_puntos_por_partido")
             case 6:
@@ -307,25 +366,25 @@ while True:
             case 9:
                 calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "asistencias_totales", maximo = True)
             case 10:
-                pass
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "promedio_puntos_por_partido" )
             case 11:
-                pass
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "promedio_rebotes_por_partido" )
             case 12:
-                pass
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "promedio_asistencias_por_partido" )
             case 13:
-                pass
+                calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "robos_totales", maximo = True)
             case 14:
-                pass
+               calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "bloqueos_totales", maximo = True)
             case 15:
-                pass
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "porcentaje_tiros_libres")
             case 16:
-                pass
+                calcular_mostrar_promedio_de_puntos_ordenado_sin_el_menor(lista_jugadores, "estadisticas", "promedio_puntos_por_partido")
             case 17:
                 pass
             case 18:
-                pass
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "porcentaje_tiros_triples")
             case 19:
-                pass
+                calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "temporadas", maximo = True)
             case 20:
                 pass
             case 23:
