@@ -227,17 +227,50 @@ def calcular_mostrar_maximo_parametro(lista_jugadores, key, parametro, maximo):
         
     return 
 
-def comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, key, parametro ):
+def comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, key, parametro, posicion):
+    """
+    Esta función compara un valor ingresado por el usuario con un parámetro específico de cada jugador
+    en una lista de jugadores e imprime los nombres de los jugadores cuyo valor de parámetro es mayor
+    que el valor ingresado por el usuario.
+    
+    :param lista_jugadores: una lista de diccionarios que contienen información sobre los jugadores
+    :param key: La clave es una cadena que representa la clave en el diccionario de cada jugador que
+    queremos comparar. Por ejemplo, si queremos comparar la "edad" de cada jugador, la clave sería
+    "edad"
+    :param parametro: El parámetro "parámetro" es una variable que representa la clave específica dentro
+    del diccionario anidado de la información de cada jugador con la que la función comparará el valor
+    ingresado por el usuario. Por ejemplo, si el diccionario anidado de cada jugador incluye claves para
+    "edad", "altura" y "peso", el "
+    :return: nada (es decir, ninguno).
+    """
 
     numero_ingresado = input("Ingrese valor que quiera comparar: ")
     numero_formateado = validar_int_o_float(numero_ingresado)
+    parametro_formateado = limpiar_cadena_de_no_alfanumericos(parametro)
     
+    lista_auxiliar = []
     print("Los jugadores que tienen mayor valor que el ingresado son:\n")
-    for jugadores in lista_jugadores:
-        if numero_formateado < jugadores[key][parametro]:
-            print(jugadores["nombre"])
     
-    return 
+    if posicion == False:
+        for jugadores in lista_jugadores:
+            diccionario_auxiliar = {}
+            if numero_formateado <= jugadores[key][parametro]:
+                diccionario_auxiliar["nombre"]= jugadores["nombre"]
+                diccionario_auxiliar[parametro_formateado] = jugadores[key][parametro]
+                lista_auxiliar.append(diccionario_auxiliar) 
+        mostrar_nombre_y_parametroy_valor(lista_auxiliar, parametro_formateado)
+        
+    elif posicion == True:
+        for jugadores in lista_jugadores:
+            diccionario_auxiliar = {}
+            if numero_formateado <= jugadores[key][parametro]:
+                diccionario_auxiliar["nombre"]= jugadores["nombre"]
+                diccionario_auxiliar["posicion"] = jugadores["posicion"]
+                lista_auxiliar.append(diccionario_auxiliar)
+        retorno = quick_sort_diccionarios(lista_auxiliar, "posicion", flag_orden = True)
+        mostrar_nombre_y_parametroy_valor(retorno, "posicion")
+        
+        return 
 
 def calcular_mostrar_promedio_de_puntos_ordenado_sin_el_menor(lista_jugadores, key , parametro):
     """
@@ -274,6 +307,38 @@ def calcular_mostrar_promedio_de_puntos_ordenado_sin_el_menor(lista_jugadores, k
     resultado = calcular_promedio_sin_el_menor(lista_sin_el_menor,  parametro)
     print("\nEl promedio de puntos por partido es: {0}".format(resultado))
     return 
+
+def calcular_mostrar_mayor_cantidad_logros(lista_jugadores, key ):
+    """
+    Esta función calcula y muestra el jugador con el mayor número de logros en una lista de jugadores.
+    
+    :param lista_jugadores: una lista de diccionarios, donde cada diccionario representa a un jugador y
+    contiene información como su nombre y logros
+    :param key: El parámetro "clave" es una cadena que representa el tipo de logros que la función está
+    calculando y comparando para cada jugador en la "lista_jugadores" (lista de jugadores). Podría ser
+    algo así como "puntos" (puntos), "goles" (goles
+    :return: nada (es decir, ninguno). Solo está imprimiendo un mensaje a la consola.
+    """
+
+    jugador_mayor_logros = None
+    logros = []
+
+    jugadores_mayor_logros = []
+    cantidad_max_logros = 0
+    
+    for jugador in lista_jugadores:
+        logros = jugador["logros"]
+        num_logros = len(logros)
+        if num_logros > cantidad_max_logros:
+            jugador_mayor_logros = jugador["nombre"]
+            cantidad_max_logros = num_logros
+        elif num_logros == cantidad_max_logros:
+            jugadores_mayor_logros.append(jugador["nombre"])
+
+    print("El jugador con mayor cantidad de logros es {0} con: {1} {2}".format(jugador_mayor_logros, cantidad_max_logros, key))
+
+    return 
+
 
 def imprimir_menu():
     '''
@@ -366,27 +431,27 @@ while True:
             case 9:
                 calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "asistencias_totales", maximo = True)
             case 10:
-                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "promedio_puntos_por_partido" )
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "promedio_puntos_por_partido", posicion = False )
             case 11:
-                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "promedio_rebotes_por_partido" )
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "promedio_rebotes_por_partido", posicion = False )
             case 12:
-                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "promedio_asistencias_por_partido" )
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "promedio_asistencias_por_partido", posicion = False )
             case 13:
                 calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "robos_totales", maximo = True)
             case 14:
                calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "bloqueos_totales", maximo = True)
             case 15:
-                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "porcentaje_tiros_libres")
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "porcentaje_tiros_libres", posicion = False)
             case 16:
                 calcular_mostrar_promedio_de_puntos_ordenado_sin_el_menor(lista_jugadores, "estadisticas", "promedio_puntos_por_partido")
             case 17:
-                pass
+                calcular_mostrar_mayor_cantidad_logros(lista_jugadores, "logros" )
             case 18:
                 comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "porcentaje_tiros_triples")
             case 19:
                 calcular_mostrar_maximo_parametro(lista_jugadores, "estadisticas", "temporadas", maximo = True)
             case 20:
-                pass
+                comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "porcentaje_tiros_de_campo", posicion = True )
             case 23:
                 pass
             case 0:
