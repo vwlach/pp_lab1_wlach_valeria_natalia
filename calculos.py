@@ -1,13 +1,23 @@
 
 
 def sumar_dato_jugador_diccionario(lista_jugadores: dict, key: str, parametro: str ) -> str:
-    '''
-    recibe una lista,  verifica que se guarde un dict y que  no este vacio, si 
-    no lo esta se utiliza un acumulador donde se suma la key
-    recibe una lista y un str
-    retorna un str
+    """
+    La función toma un diccionario de jugadores, una clave y un parámetro, y devuelve la suma del
+    parámetro para todos los jugadores y el número de jugadores.
     
-    '''
+    :param lista_jugadores: Un diccionario que contiene información sobre los jugadores
+    :type lista_jugadores: dict
+    :param key: La clave es una cadena que representa la clave del diccionario que contiene los datos
+    que queremos resumir
+    :type key: str
+    :param parametro: La variable parámetro es una cadena que representa la clave específica dentro del
+    diccionario de cada jugador que queremos resumir. Por ejemplo, si queremos sumar el número total de
+    goles marcados por cada jugador, pasaríamos "goles" como parámetro
+    :type parametro: str
+    :return: una tupla que contiene el valor acumulado de un parámetro específico para todos los
+    jugadores en un diccionario y el número de jugadores que se consideraron en la acumulación.
+    """
+    
     acumulador_dato = 0
     contador = 0
     for jugadores in lista_jugadores:
@@ -18,12 +28,22 @@ def sumar_dato_jugador_diccionario(lista_jugadores: dict, key: str, parametro: s
     return (acumulador_dato, contador)
 
 def sumar_dato_jugadores_lista(lista_personajes: list, parametro: str ) -> str:
-    '''
-    recibe una lista,  verifica que se guarde un dict y que  no este vacio, si no lo esta se utiliza un acumulador donde se suma la key
-    recibe una lista y un str
-    retorna un str
+    """
+    La función calcula la suma de un parámetro específico para todos los elementos del diccionario en
+    una lista y devuelve la suma y el número de elementos.
     
-    '''
+    :param lista_personajes: una lista de diccionarios que representan personajes en un juego o historia
+    :type lista_personajes: list
+    :param parametro: El parámetro es una cadena que representa la clave del valor que queremos sumar de
+    los diccionarios de la lista. Por ejemplo, si los diccionarios de la lista tienen una clave
+    "puntuación", entonces el parámetro sería "puntuación"
+    :type parametro: str
+    :return: una tupla que contiene la suma de un parámetro específico (especificado por el parámetro de
+    entrada "parámetro") para todos los diccionarios en una lista (especificado por el parámetro de
+    entrada "lista_personajes") y el número de diccionarios en la lista que tenían el parámetro
+    especificado.
+    """
+    
     acumulador_dato = 0
     contador = 0
     for personajes in lista_personajes:
@@ -34,25 +54,39 @@ def sumar_dato_jugadores_lista(lista_personajes: list, parametro: str ) -> str:
     return (acumulador_dato, contador)
 
 def dividir(dividendo, divisor):
-    '''
-    recibe dos numero, diviendo y divisor si el divisor es 0 retorna 0, sino hace la division
-    recibe dos numero
-    retorna la division
-
-    '''
+    """
+    La función divide dos números y devuelve el resultado, pero si el divisor es cero, devuelve cero.
+    
+    :param dividendo: El dividendo, o el número que se divide
+    :param divisor: El número que divide el dividendo. No puede ser cero, de lo contrario la función
+    devolverá 0
+    :return: Si el divisor no es igual a cero, la función devuelve el resultado de dividir el dividendo
+    por el divisor. Si el divisor es igual a cero, la función devuelve 0.
+    """
+    
     if divisor == 0:
         return 0
     else:
         return dividendo / divisor
     
 def calcular_promedio(lista_jugadores: dict , key: str, parametro: str) -> float:
-    '''
-    esta funcion calcula el promedio, llama a la funcion sumar, retorna los
-    valores para hacer el promedio y llama a dividir para que haga los calculos 
-    recibe la lista y la key de lo que se quiere calcular
-    devuelve el resultado
-
-    '''
+    """
+    Esta función calcula el valor promedio de un parámetro específico para una tecla dada en un
+    diccionario de jugadores.
+    
+    :param lista_jugadores: El diccionario que contiene información sobre los jugadores
+    :type lista_jugadores: dict
+    :param key: La clave es una cadena que representa el identificador único de un jugador en el
+    diccionario. Se utiliza para acceder a los datos del jugador en el diccionario
+    :type key: str
+    :param parametro: El parámetro es una cadena que representa el atributo o estadística específica
+    para la que queremos calcular el promedio. Por ejemplo, si estamos calculando la puntuación media de
+    un jugador, el parámetro podría ser "puntuación"
+    :type parametro: str
+    :return: una cadena formateada que representa el valor promedio de un parámetro específico para una
+    clave dada en un diccionario de jugadores.
+    """
+    
     
     suma_dato , divisor = sumar_dato_jugador_diccionario(lista_jugadores, key, parametro )
     promedio_dato = dividir(suma_dato, divisor)
