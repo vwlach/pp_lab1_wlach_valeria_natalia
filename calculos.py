@@ -114,7 +114,7 @@ def calcular_promedio_sin_el_menor(lista_jugadores, parametro ):
 
     return numero_formateado
     
-def quick_sort_diccionarios(lista_original: list, key,  flag_orden: bool, ) -> list:
+def quick_sort_diccionarios(lista_original: list, key,  flag_orden: bool ) -> list:
     """
     Esta es una función de Python que realiza una clasificación rápida en una lista de diccionarios
     según una clave específica y un orden de clasificación.
@@ -222,3 +222,4 @@ def calcular_max_min_dato_de_diccionario(lista_personajes: list, key:str, parame
                 lista_auxiliar.append(diccionario_auxiliar)
     
     return lista_auxiliar
+

@@ -119,8 +119,6 @@ def guardar_estadisticas_en_csv(ruta_file:str, contenido:dict): # PUNTO 3
     :type contenido: dict
     """
    
-
-    
     lista_claves = []
     lista_valores = []
    
@@ -195,6 +193,7 @@ def calcular_mostrar_promedio_de_puntos_ordenado(lista_jugadores, key , parametr
        lista_auxiliar.append(diccionario_auxiliar)
     
     retorno_quick = quick_sort_diccionarios(lista_auxiliar,"nombre", flag_orden = True)
+    print(retorno_quick)
     mostrar_nombre_parametro_y_valor(retorno_quick, "promedio_puntos_por_partido")
     
     return 
@@ -314,7 +313,6 @@ def calcular_mostrar_promedio_de_puntos_ordenado_sin_el_menor(lista_jugadores, k
     :return: Ninguno.
     """
     
-
     lista_auxiliar = []
     for jugadores in lista_jugadores:
        diccionario_auxiliar = {}
@@ -367,6 +365,40 @@ def calcular_mostrar_mayor_cantidad_logros(lista_jugadores, key ): # PUNTO 17
 
     return 
 
+def calcular_posicion_por_parametro(lista_jugadores, key, parametro, ruta_file ):
+
+    lista_jugadores_por_parametro = []
+    lista_parametros_limpios = ["nombre"]
+    
+    for jugador in lista_jugadores:
+            diccionario_parametro = {}
+            parametro_limpio = limpiar_cadena_de_no_alfanumericos(parametro)
+            diccionario_parametro["nombre"] = jugador["nombre"]
+            diccionario_parametro[parametro_limpio] = jugador[key][parametro]
+            lista_jugadores_por_parametro.append(diccionario_parametro)
+            lista_ranking_ordenado_por_parametro = quick_sort_diccionarios(lista_jugadores_por_parametro, parametro_limpio, flag_orden = True )
+            lista_parametros_limpios.append(parametro_limpio)
+
+    lista_indice_elemento = []
+    
+    parametros_str = ", ".join(lista_parametros_limpios)
+    for indice, elemento in enumerate(lista_ranking_ordenado_por_parametro):
+        diccionario_indice_elemento = {}
+        diccionario_indice_elemento["indice"] = str(indice)
+        diccionario_indice_elemento["elemento"] =  str(elemento["nombre"])
+        lista_indice_elemento.append(diccionario_indice_elemento)
+        with open(ruta_file, 'w+') as archivo:
+            archivo.write("{0}\n ".format(parametros_str))
+            archivo.write("{0}\n ".format(diccionario_indice_elemento["indice"]))
+            archivo.write("{0}\n ".format(diccionario_indice_elemento["elemento"]))
+    print(lista_indice_elemento)
+    
+    """ parametros_str = ", ".join(lista_parametros_limpios)
+        nombres_str = ", ".join(diccionario_indice_elemento)
+        indice_srr = ", ".join(diccionario_indice_elemento)"""
+    
+
+    return 
 
 def imprimir_menu():
     """
@@ -482,7 +514,13 @@ while True:
             case 20:
                 comparar_y_mostrar_valor_usuario_con_parametro(lista_jugadores, "estadisticas", "porcentaje_tiros_de_campo", posicion = True )
             case 23:
-                print("Lo siento, prefiero tener todo lo mas correcto posible :)")
+                guardar_ranking_en_csv = (r"C:\Users\\blair\\Documents\\GitHub\\pp_lab1_wlach_valeria_natalia\\jugadores_ranking.csv")
+                lista_parametros = ["temporadas", "puntos_totales","promedio_puntos_por_partido", "rebotes_totales",
+                        "promedio_rebotes_por_partido", "asistencias_totales", "promedio_asistencias_por_partido",
+                        "robos_totales", "bloqueos_totales","porcentaje_tiros_de_campo", "porcentaje_tiros_libres",
+                        "porcentaje_tiros_triples" ]
+                for parametro in lista_parametros:
+                     calcular_posicion_por_parametro(lista_jugadores, "estadisticas", parametro, guardar_ranking_en_csv)
             case 0:
                 print("___________________________________________________________________\n")
                 print("________ SALIENDO________")
